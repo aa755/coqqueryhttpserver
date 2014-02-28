@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+  <head>
+    <title>Query Interface</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    <input type="text" name="coqQuery" value="Print nat." size="200" />
+    <input type="button" value="Query" name="querySubmit" onclick="" />
+    <div id="response"></div>
+    <ul>
+      <li> To locate an object ob (Coq definition/lemma/inductive e.t.c), 
+          query "Locate ob.". For example, type "Locate rule_true." above and click Query. </li>
+      <li> To view the definition of an object, your query should be 
+          "Print ob_short.", where ob_short is the shorter name printed by
+           the locate query on ob. Usually, ob_short is the same as ob.
+            Try the query "Print Opid."</li>
+    </ul>
+
+    
+  </body>
+</html>
