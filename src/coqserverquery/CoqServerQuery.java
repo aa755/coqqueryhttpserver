@@ -27,6 +27,58 @@ public class CoqServerQuery {
   static class MyHandler implements HttpHandler {
 
       CoqTopXMLIO coqtop=null;
+      static String getHeader(String query)
+      {
+          return               "<!DOCTYPE html>\n" +
+"<html>\n" +
+" \n" +
+"  <head>\n" +
+"    <title>Query Interface</title>\n" +
+"     <link href=\"http://www.nuprl.org/html/verification/v1/html/coqdoc.css\" rel=\"stylesheet\" type=\"text/css\"/>\n" +
+"    <meta charset=\"UTF-8\">\n" +
+"    <meta name=\"viewport\" content=\"width=device-width\">\n" +
+"<script> \n" +
+"function goto_url(){\n" +
+"    var word = document.getElementsByName(\"coqQuery\")[0].value;\n" +
+"            //document.forms[0].elements[0].value;//by index\n" +
+"    var escaped = escape(word);//apply url encoding    \n" +
+"    var url = \"http://localhost:8000/coq_query?\"+escaped;\n" +
+"    location.href = url;\n" +
+"}\n" +
+"</script>  </head>\n" +
+"  \n" +
+"  \n" +
+"  <body>\n" +
+"\n" +
+"        <div id=\"query\"><input type=\"text\" name=\"coqQuery\" value=\n" +
+"                     \""+query+"\"\n" +
+"                     size=\"200\" /> </div>\n" +
+"        <input type=\"button\" value=\"Query\" name=\"querySubmit\" onclick=\"goto_url();\" />\n" +
+"    <!--div id=\"response\">Change this</div-->\n" +
+"    <ul>\n" +
+"      <li> To locate an object ob (a Coq <span class=\"id\" type=\"keyword\">\n" +
+"              Definition/Lemma/Inductive</span>\n" +
+"           e.t.c.), \n" +
+"          query \"Locate ob.\". For example, type \"Locate sequent_true.\" (excluding quotes) \n" +
+"            above and click Query.\n" +
+"      </li>\n" +
+"      <li> To view the definition of an object, your query should be \n" +
+"          \"Print ob_fullname.\", where ob_fullname is is full name of the\n" +
+"           object ob (including the prefixes). \n" +
+"            The output of \"Locate ob.\" contains the full name.\n" +
+"             For example, try the query \"Print sequents.sequent_true.\" . \n" +
+"             Also, usually the object X.Y can be found in the file X.v .\n" +
+"            </li>\n" +
+"    </ul>\n" +
+"    <h2>Coqtop's response:</h2>\n" +
+"    <pre>";
+
+      }
+      String footer="    </pre>\n" +
+"  </body>\n" +
+"</html>\n" +
+"";
+      
     public MyHandler(String initCommand) {
         try {
         coqtop=new CoqTopXMLIO();
@@ -40,16 +92,24 @@ public class CoqServerQuery {
     public synchronized void handle(HttpExchange t) throws IOException {
       String query = t.getRequestURI().getQuery();
 
-      String response = "Your query was :" + query+"\n";
-      if(coqtop==null)
-      {
-        response=response+"there was a problem in starting coqtop\n";
-      }
-      else
-      {
-        CoqTopXMLIO.CoqRecMesg rec= coqtop.query(query);
-        response=response+"coqtop replied:\n"+ rec.conciseReply;
-      }
+      
+      String responseBody = "";//Your query was :" + query+"\n";
+      if (query != null && !query.isEmpty()) {
+            if (coqtop == null) {
+                responseBody = responseBody + "there was a problem in starting coqtop\n";
+            } else {
+                CoqTopXMLIO.CoqRecMesg rec = coqtop.query(query);
+                if(rec.success)
+                {
+                    responseBody = responseBody + rec.conciseReply;
+                }
+                else
+                {
+                    responseBody= responseBody+ rec.nuDoc.toXML();
+                }
+            }
+        }
+      String response=getHeader(query)+responseBody+footer;
       t.sendResponseHeaders(200, response.length());
       try (OutputStream os = t.getResponseBody()) {
         os.write(response.getBytes());

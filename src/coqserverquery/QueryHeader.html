@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+ 
+  <head>
+    <title>Query Interface</title>
+     <link href="v1/html/coqdoc.css" rel="stylesheet" type="text/css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+<script> 
+function goto_url(){
+    var word = document.getElementsByName("coqQuery")[0].value;
+            //document.forms[0].elements[0].value;//by index
+    var escaped = escape(word);//apply url encoding    
+    var url = "http://localhost:8000/coq_query?"+escaped;
+    location.href = url;
+}
+</script>  </head>
+  
+  
+  <body>
+
+        <div id="query"><input type="text" name="coqQuery" value=
+                     "Locate rule_true."
+                     size="200" /> </div>
+        <input type="button" value="Query" name="querySubmit" onclick="goto_url();" />
+    <!--div id="response">Change this</div-->
+    <ul>
+      <li> To locate an object ob (a Coq <span class="id" type="keyword">
+              Definition/Lemma/Inductive</span>
+           e.t.c.), 
+          query "Locate ob.". For example, type "Locate rule_true." (excluding quotes) 
+            above and click Query.
+      </li>
+      <li> To view the definition of an object, your query should be 
+          "Print ob_fullname.", where ob_fullname is is full name of the
+           object ob (including the prefixes). 
+            The output of "Locate ob." contains the full name.
+             For example, try the query "Print sequents.sequent_true." . 
+             Also, usually the object X.Y can be found in the file X.v .
+            </li>
+    </ul>
+    <h2>Coqtop's response:</h2>
+    <pre>
