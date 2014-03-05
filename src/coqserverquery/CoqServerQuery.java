@@ -52,7 +52,7 @@ public class CoqServerQuery {
 "\n" +
 "        <div id=\"query\"><input type=\"text\" name=\"coqQuery\" value=\n" +
 "                     \""+query+"\"\n" +
-"                     size=\"200\" /> </div>\n" +
+"                     size=\"80\" /> </div>\n" +
 "        <input type=\"button\" value=\"Query\" name=\"querySubmit\" onclick=\"goto_url();\" />\n" +
 "    <!--div id=\"response\">Change this</div-->\n" +
 "    <ul>\n" +
@@ -97,10 +97,10 @@ public class CoqServerQuery {
           return !query.contains(";");
       }
       
-      static String securityError="Security Error: For security reasons, a query must start with "
-              + "Print, Locate, SearchAbout or SearchPattern "
-              + "and must NOT contain a semicolon(;). If you beleive "
-              + "your query is legitimate, please (anonymously)email the authors of the paper.";
+      static String securityError="Security Error: For security reasons, a query must start with \n"
+              + "Print, Locate, SearchAbout or SearchPattern \n"
+              + "and must NOT contain a semicolon(;). \n If you beleive "
+              + "your query is legitimate, \n please (anonymously)email the authors of the paper.";
 
       @Override
     public synchronized void handle(HttpExchange t) throws IOException {
@@ -127,6 +127,10 @@ public class CoqServerQuery {
                 }
             }
         }
+      if(query==null || query.isEmpty())
+      {
+          query="Please type your query here.";
+      }
       String response=getHeader(query)+responseBody+footer;
       t.sendResponseHeaders(200, response.length());
       try (OutputStream os = t.getResponseBody()) {
