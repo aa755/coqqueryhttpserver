@@ -105,6 +105,8 @@ public class CoqServerQuery {
       @Override
     public synchronized void handle(HttpExchange t) throws IOException {
       String query = t.getRequestURI().getQuery();
+      System.out.println("remote IP:"+t.getRemoteAddress());
+      System.out.println("URI:"+t.getRequestURI());
       String responseBody = "";//Your query was :" + query+"\n";
       if (query != null && !query.isEmpty()) {
             if (coqtop == null || !isQuerySecure(query)) {
