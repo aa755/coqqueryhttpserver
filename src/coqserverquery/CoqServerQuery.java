@@ -42,7 +42,7 @@ public class CoqServerQuery {
 "    var word = document.getElementsByName(\"coqQuery\")[0].value;\n" +
 "            //document.forms[0].elements[0].value;//by index\n" +
 "    var escaped = escape(word);//apply url encoding    \n" +
-"    var url = \"http://localhost:8000/coq_query?\"+escaped;\n" +
+"    var url = \"/coq_query?\"+escaped;\n" +
 "    location.href = url;\n" +
 "}\n" +
 "</script>  </head>\n" +
@@ -97,19 +97,20 @@ public class CoqServerQuery {
           return !query.contains(";");
       }
       
-      static String securityError="Security Error: For security reasons, a query must start with"
-              + "Print, Locate, SearchAbout or SearchPattern"
-              + "and must NOT contain a semicolon(;). If you beleive"
-              + "your query is legitimate, please email aa755@cornell.edu";
+      static String securityError="Security Error: For security reasons, a query must start with "
+              + "Print, Locate, SearchAbout or SearchPattern "
+              + "and must NOT contain a semicolon(;). If you beleive "
+              + "your query is legitimate, please (anonymously)email the authors of the paper.";
 
       @Override
     public synchronized void handle(HttpExchange t) throws IOException {
       String query = t.getRequestURI().getQuery();
       String responseBody = "";//Your query was :" + query+"\n";
       if (query != null && !query.isEmpty()) {
-            if (coqtop == null || isQuerySecure(query)) {
+            if (coqtop == null || !isQuerySecure(query)) {
                 if(coqtop==null)
-                responseBody = responseBody + "there was a problem in starting coqtop\n";
+                responseBody = responseBody + "There was a problem in starting coqtop\n."
+                        + "Sorry about that. Please (anonymously)email the authors of the paper ASAP.";
                 else
                 responseBody = responseBody + securityError;                
             } else {
