@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class CoqServerQuery {
 
   public static void main(String[] args) throws Exception {
-    HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+    HttpServer server = HttpServer.create(new InetSocketAddress(4987), 0);
     server.createContext("/coq_query", new MyHandler(args[0]));
     server.setExecutor(null); // creates a default executor
     server.start();
@@ -88,15 +88,30 @@ public class CoqServerQuery {
       }
     }
 
-    @Override
+      static boolean isQuerySecure(String query) 
+      {
+          if (!query.startsWith("Print") && !query.startsWith("Locate")
+                  && !query.startsWith("SearchAbout") && !query.startsWith("SearchAbout")) 
+              return false;
+          
+          return !query.contains(";");
+      }
+      
+      static String securityError="Security Error: For security reasons, a query must start with"
+              + "Print, Locate, SearchAbout or SearchPattern"
+              + "and must NOT contain a semicolon(;). If you beleive"
+              + "your query is legitimate, please email aa755@cornell.edu";
+
+      @Override
     public synchronized void handle(HttpExchange t) throws IOException {
       String query = t.getRequestURI().getQuery();
-
-      
       String responseBody = "";//Your query was :" + query+"\n";
       if (query != null && !query.isEmpty()) {
-            if (coqtop == null) {
+            if (coqtop == null || isQuerySecure(query)) {
+                if(coqtop==null)
                 responseBody = responseBody + "there was a problem in starting coqtop\n";
+                else
+                responseBody = responseBody + securityError;                
             } else {
                 CoqTopXMLIO.CoqRecMesg rec = coqtop.query(query);
                 if(rec.success)
