@@ -101,7 +101,7 @@ public class CoqServerQuery {
       }
       
       static String securityError="Security Error: For security reasons, a query must start with \n"
-              + "Print, Check Locate, SearchAbout or SearchPattern \n"
+              + "Print, Check, Locate, SearchAbout or SearchPattern \n"
               + "and must NOT contain a semicolon(;). \n If you beleive "
               + "your query is legitimate, \n please (anonymously)email the authors of the paper.";
 
