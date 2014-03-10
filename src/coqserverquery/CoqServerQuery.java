@@ -90,15 +90,18 @@ public class CoqServerQuery {
 
       static boolean isQuerySecure(String query) 
       {
-          if (!query.startsWith("Print") && !query.startsWith("Locate")
-                  && !query.startsWith("SearchAbout") && !query.startsWith("SearchAbout")) 
+          if (!query.startsWith("Print") 
+                  && !query.startsWith("Locate")
+                  && !query.startsWith("Check")
+                  && !query.startsWith("SearchAbout") 
+                  && !query.startsWith("SearchAbout")) 
               return false;
           
           return !query.contains(";");
       }
       
       static String securityError="Security Error: For security reasons, a query must start with \n"
-              + "Print, Locate, SearchAbout or SearchPattern \n"
+              + "Print, Check Locate, SearchAbout or SearchPattern \n"
               + "and must NOT contain a semicolon(;). \n If you beleive "
               + "your query is legitimate, \n please (anonymously)email the authors of the paper.";
 
