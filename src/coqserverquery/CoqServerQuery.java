@@ -69,6 +69,12 @@ public class CoqServerQuery {
 "             For example, try the query \"Print sequents.sequent_true.\" . \n" +
 "             Also, usually the object X.Y can be found in the file X.v .\n" +
 "            </li>\n" +
+"      <li> "
+                  + "<a href=\"http://coq.inria.fr/V8.1/refman/Reference-Manual008.html\">SearchAbout</a>"
+                  + " and "
+                  + "<a href=\"http://coq.inria.fr/V8.1/refman/Reference-Manual008.html\">SearchPattern</a>"
+                  + " queries are also supported." +
+"            </li>\n" +
 "    </ul>\n" +
 "    <h2>Coqtop's response:</h2>\n" +
 "    <pre>";
@@ -94,7 +100,7 @@ public class CoqServerQuery {
                   && !query.startsWith("Locate")
                   && !query.startsWith("Check")
                   && !query.startsWith("SearchAbout") 
-                  && !query.startsWith("SearchAbout")) 
+                  && !query.startsWith("SearchPattern")) 
               return false;
           
           return !query.contains(";");
