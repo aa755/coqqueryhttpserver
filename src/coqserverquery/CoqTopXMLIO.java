@@ -6,14 +6,11 @@ package coqserverquery;
 
 //import java.io.BufferedReader;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-//import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-
-//import nu.xom.ParsingException;
-//import nu.xom.ValidityException;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 
@@ -30,12 +27,12 @@ private  PrintWriter input;
 //private static PrintWriter input;
 
     
-    public CoqTopXMLIO() throws IOException {
-        
+    public CoqTopXMLIO(File dir) throws IOException {
         
             String command="coqtop";
 //            process = new ProcessBuilder(command,"-ideslave").directory( "C:\\Users\\Abhishek\\Desktop\\vnuprl\\coq").start();
-            process = new ProcessBuilder(command,"-ideslave").start();
+            process = new ProcessBuilder(command,"-ideslave").
+                          directory(dir).start();
         
             input = new PrintWriter(new OutputStreamWriter(process.getOutputStream()), true);
             result=new BufferedReader(new InputStreamReader(process.getInputStream()));

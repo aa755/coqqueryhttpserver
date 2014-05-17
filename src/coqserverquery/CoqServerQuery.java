@@ -12,14 +12,65 @@ import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CoqServerQuery {
 
+  static class CoqProject
+  {
+    String mainFile;
+    /**
+     * the query server thread for this project
+     * can be accessed at
+     * http://hostname:port/qServerContext
+     */
+    String qServerContext;
+    String coqdocHtmlWebRoot=null;
+
+    public CoqProject(String line) {
+      parseInfoFromLine(line);
+    }
+    
+    
+    final void parseInfoFromLine(String line)
+    {
+      String [] words = line.split(";");
+      mainFile=words[0].trim();
+      qServerContext=words[1].trim();
+      if(words.length>2)
+       coqdocHtmlWebRoot=words[2].trim();
+    }
+  }
+  
   public static void main(String[] args) throws Exception {
-    HttpServer server = HttpServer.create(new InetSocketAddress(4987), 0);
-    server.createContext("/coq_query", new MyHandler(args[0]));
+    String configFile=args[0];
+    BufferedReader br = new BufferedReader(new FileReader(configFile));
+    
+    String line=br.readLine();
+    int port=Integer.parseInt(line);
+    
+    line=br.readLine();
+    int maxQueued=Integer.parseInt(line);
+
+    
+    HttpServer server = HttpServer.create(new InetSocketAddress(port),
+                                                maxQueued);
+
+    line=br.readLine();
+    while(line!=null)
+    {
+      if(line.isEmpty())
+        break;
+      CoqProject cqp=new CoqProject(line);
+      server.createContext("/"+cqp.qServerContext, 
+                new MyHandler(cqp));
+      line=br.readLine();
+    }
+    
     server.setExecutor(null); // creates a default executor
     server.start();
   }
@@ -27,7 +78,8 @@ public class CoqServerQuery {
   static class MyHandler implements HttpHandler {
 
       CoqTopXMLIO coqtop=null;
-      static String getHeader(String query)
+      CoqProject cqp;
+     String getHeader(String query)
       {
           return               "<!DOCTYPE html>\n" +
 "<html>\n" +
@@ -42,7 +94,7 @@ public class CoqServerQuery {
 "    var word = document.getElementsByName(\"coqQuery\")[0].value;\n" +
 "            //document.forms[0].elements[0].value;//by index\n" +
 "    var escaped = escape(word);//apply url encoding    \n" +
-"    var url = \"/coq_query?\"+escaped;\n" +
+"    var url = \"/"+cqp.qServerContext+"?\"+escaped;\n" +
 "    location.href = url;\n" +
 "}\n" +
 "</script>  </head>\n" +
@@ -85,10 +137,15 @@ public class CoqServerQuery {
 "</html>\n" +
 "";
       
-    public MyHandler(String initCommand) {
+    public MyHandler(CoqProject cqp) {
         try {
-        coqtop=new CoqTopXMLIO();
+        File mainFile=new File(cqp.mainFile);
+        coqtop=new CoqTopXMLIO(mainFile.getParentFile());
+
+        String filename=mainFile.getName();
+        String initCommand="Require Export "+filename+".";
         coqtop.interpret(initCommand);
+        this.cqp=cqp;
       } catch (IOException ex) {
         Logger.getLogger(CoqServerQuery.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -100,14 +157,15 @@ public class CoqServerQuery {
                   && !query.startsWith("Locate")
                   && !query.startsWith("Check")
                   && !query.startsWith("SearchAbout") 
-                  && !query.startsWith("SearchPattern")) 
+                  && !query.startsWith("SearchPattern")
+                  && !query.startsWith("About")) 
               return false;
           
           return !query.contains(";");
       }
       
       static String securityError="Security Error: For security reasons, a query must start with \n"
-              + "Print, Check, Locate, SearchAbout or SearchPattern \n"
+              + "Print, Check, Locate, SearchAbout, About or SearchPattern \n"
               + "and must NOT contain a semicolon(;). \n If you beleive "
               + "your query is legitimate, \n please (anonymously)email the authors of the paper.";
 
