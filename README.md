@@ -12,4 +12,30 @@ Usage:
 
 2) java -jar CoqServerQuery.jar configFile
 
-Coming Soon : desctiption of the ConfigFile syntax. For now, reading the main function of /src/coqserverquery/CoqServerQuery.java might be a way to reverse engineer the format of the configFile
+
+The contents of configFile must be as follows:
+
+1) The first line must be the PORT number at which this server should listen
+
+2) The second line should be a number which indicates the maximum number of http requests (across all projects)
+    that can be pending when the server accepts a new http request
+
+3) Then, there should be one line for each project that can be queried.
+    Items in these lines are separated by a semicolon. The server starts an instance of coqtop for each of these projects
+    
+  a) The first item must be the path of the master Coq file of this project. The ".v" extension is supposed to be omitted.
+       Suppose this item is of the format PATH/FILENAME. A new coqtop will be started in the directory PATH and
+       the commant "Require Export FILENAME." will be sent to this coqtop process. The file FILENAME.v should
+       import all other Coq files whose contents are supposed to be queried.
+       
+  b) The second item is used to determine the URL at which this project can be queried. If this item is CONTEXT,
+      the webpage for querying this project is http://hostname:PORT/CONTEXT .
+      
+      
+      
+An example configFile is can be found at http://www.cs.cornell.edu/~aa755/cqQueryConfig.txt
+The server corresponding to the first project can be accessed at
+http://nuprl.cs.cornell.edu:4987/coq_query?
+
+       
+    
