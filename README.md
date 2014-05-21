@@ -8,12 +8,12 @@ http://www.cs.cornell.edu/~aa755/software.php (2nd item in the list)
 
 Usage:
 
-1) build this project in netbeans (tested in Netbeans 7.4). 
+1) build this project in netbeans (tested in Netbeans 7.4). then go to the generated dist/ directory.
 
-2) java -jar CoqServerQuery.jar configFile
+2) java -jar CoqServerQuery.jar CONFIGFILE
 
 
-The contents of configFile must be as follows:
+The contents of CONFIGFILE must be as follows:
 
 1) The first line must be the PORT number at which this server should listen
 
