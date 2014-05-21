@@ -26,7 +26,7 @@ The contents of CONFIGFILE must be as follows:
   a) The first item must be the path of the master Coq file of this project. The ".v" extension is supposed to be omitted.
        Suppose this item is of the format PATH/FILENAME. A new coqtop will be started in the directory PATH and
        the commant "Require Export FILENAME." will be sent to this coqtop process. The file FILENAME.v should
-       import all other Coq files whose contents are supposed to be queried.
+       import (Require Import/Export) all other Coq files of this project whose contents are supposed to be queried.
        
   b) The second item is used to determine the URL at which this project can be queried. If this item is CONTEXT,
       the webpage for querying this project is http://hostname:PORT/CONTEXT .
@@ -35,7 +35,7 @@ The contents of CONFIGFILE must be as follows:
       
 An example configFile is can be found at http://www.cs.cornell.edu/~aa755/cqQueryConfig.txt
 The server corresponding to the first project can be accessed at
-http://nuprl.cs.cornell.edu:4987/coq_query?
+http://nuprl.cs.cornell.edu:4987/coq_query
 
        
     
