@@ -2,11 +2,10 @@ coqqueryhttpserver
 ==================
 
 For a high level decription of what this server does, visit:
-http://www.cs.cornell.edu/~aa755/software.php
+http://www.cs.cornell.edu/~aa755/software.php (2nd item in the list)
 
 
 
-An HTTP server that answers Coq queries like Print, Locate by talking to coqtop.
 Usage:
 1) build this project in netbeans (tested in Netbeans 7.4). 
 2) java -jar CoqServerQuery.jar configFile
