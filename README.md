@@ -7,6 +7,7 @@ http://www.cs.cornell.edu/~aa755/software.php (2nd item in the list)
 
 
 Usage:
+
 1) build this project in netbeans (tested in Netbeans 7.4). 
 
 2) java -jar CoqServerQuery.jar configFile
