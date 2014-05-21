@@ -12,4 +12,4 @@ Usage:
 
 2) java -jar CoqServerQuery.jar configFile
 
-Coming Soon : desctiption of the ConfigFile syntax. For now, reading the main function of CoqServerQuery.java might be a way to reverse engineer the format of the configFile
+Coming Soon : desctiption of the ConfigFile syntax. For now, reading the main function of /src/coqserverquery/CoqServerQuery.java might be a way to reverse engineer the format of the configFile
