@@ -30,6 +30,7 @@ public class CoqServerQuery {
      */
     String qServerContext;
     String coqdocHtmlWebRoot=null;
+//    String examplesHtml=
 
     public CoqProject(String line) {
       parseInfoFromLine(line);
@@ -111,20 +112,27 @@ public class CoqServerQuery {
 "      <li> To locate an object ob (a Coq <span class=\"id\" type=\"keyword\">\n" +
 "              Definition/Lemma/Inductive</span>\n" +
 "           e.t.c.), \n" +
-"          query \"Locate ob.\". For example, type \"Locate sequent_true.\" (excluding quotes) \n" +
-"            above and click Query.\n" +
+"          query \"Locate ob.\". "
+          /*        + "For example, type \"Locate sequent_true.\" (excluding quotes) \n" +
+"            above and click Query.\n" */ +
 "      </li>\n" +
 "      <li> To view the definition of an object, your query should be \n" +
 "          \"Print ob_fullname.\", where ob_fullname is is full name of the\n" +
 "           object ob (including the prefixes). \n" +
-"            The output of \"Locate ob.\" contains the full name.\n" +
-"             For example, try the query \"Print sequents.sequent_true.\" . \n" +
+"            The output of \"Locate ob.\" contains the full name.\n"
+/* + "             For example, try the query \"Print sequents.sequent_true.\" . \n"*/ +
 "             Also, usually the object X.Y can be found in the file X.v .\n" +
 "            </li>\n" +
 "      <li> "
-                  + "<a href=\"http://coq.inria.fr/V8.1/refman/Reference-Manual008.html\">SearchAbout</a>"
+                  + "<a href=\"http://coq.inria.fr/V8.4/refman/Reference-Manual008.html#sec237\">Check</a>"
                   + " and "
-                  + "<a href=\"http://coq.inria.fr/V8.1/refman/Reference-Manual008.html\">SearchPattern</a>"
+                  + "<a href=\"http://coq.inria.fr/V8.4/refman/Reference-Manual008.html#sec244\">SearchAbout</a>"
+                  + " and "
+                  + "<a href=\"http://coq.inria.fr/V8.4/refman/Reference-Manual008.html#sec245\">SearchPattern</a>"
+                  + " and "
+                  + "<a href=\"http://coq.inria.fr/V8.4/refman/Reference-Manual008.html#sec230\">About</a>"
+                  + " and "
+                  + "<a href=\"http://coq.inria.fr/V8.4/refman/Reference-Manual008.html#sec242\">Print Assumptions</a>"
                   + " queries are also supported." +
 "            </li>\n" +
 "    </ul>\n" +
